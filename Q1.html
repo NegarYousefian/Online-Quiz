@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question 1</title>
+    <link rel="stylesheet" href="Q1.css">
+</head>
+<body onload="generateQuestion()">
+    <div class="container">
+        <div id="question"></div>
+        <ul>
+            <li><input name="option" type="radio"><label class="options"></label></li>
+            <li><input name="option" type="radio"><label class="options"></label></li>
+            <li><input name="option" type="radio"><label class="options"></label></li>
+            <li><input name="option" type="radio"><label class="options"></label></li>
+        </ul>
+        <div id="answer"></div>
+        <button type="button" onclick="checkAnswer()">Next</button>
+    </div>
+    
+
+    <script type="text/javascript">
+        var sentences = ["Last night, I ate dinner.", "She loves flowers.", "Language learning is fun.", "I would like to travel with you.", "I am studying English history.", "I am playing piano.", "I decided to go to Germany.", "Grandmother cooks very well.", "She buys a red hat.", "Birds can fly."]
+        var options = [["day", "launch","us"],["they", "we", "go"],["are", "night", "come"],["traveling","could","far"],["we","are","is"],["launch","sleeping","hello"],["went","is","help"],["my","sad","ugly"],["want","they","we"],["speak","cannot","smile"]]
+        var ans = ""
+        var txtResult = "Wrong!"
+        function generateQuestion(){
+            document.getElementById("answer").innerHTML = ""
+            var randN = Math.floor(Math.random() * 10)
+            var selectedOptions = options[randN]
+            var selectedSentence = sentences[randN]
+            var newSentence = ""
+            var sentenceLength = selectedSentence.length
+            var firstChar = "."
+            var randIndex = 0
+            
+            while(firstChar != " " && firstChar != selectedSentence[0]){
+                randIndex = Math.floor(Math.random() * sentenceLength)
+                firstChar = selectedSentence[randIndex]
+            }
+            if(randIndex != 0) randIndex++
+            do{
+                ans += selectedSentence[randIndex]
+                randIndex++
+            } while(selectedSentence[randIndex] != " " && selectedSentence[randIndex] != "." && selectedSentence[randIndex] != ",")
+            newSentence = selectedSentence.replace(ans, "...")
+            document.getElementById("question").innerHTML = newSentence
+            var completeOptions = [...selectedOptions, ans]
+            var randAnsIndex = Math.floor(Math.random() * 4)
+            for(let i = 0; i < 4; i++){
+                if(randAnsIndex == 4) randAnsIndex = 0
+                document.getElementsByClassName("options")[randAnsIndex].innerText= completeOptions[i]
+                document.getElementsByName('option')[randAnsIndex].value = completeOptions[i]
+                randAnsIndex++
+            }
+            
+        }
+
+        function checkAnswer(){
+            var ele = document.getElementsByName('option'); 
+            for(i = 0; i < ele.length; i++) { 
+                if(ele[i].checked) {
+                    if(ele[i].value == ans){
+                        txtResult = "Correct!"
+                        break
+                    }
+                }
+            } 
+            document.getElementById("answer").style.display = "block"
+            document.getElementById("answer").innerHTML = txtResult + "<br/>" + "Loading..."
+            window.setTimeout(function () {window.location.reload();}, 2500)
+        }
+    </script>
+</body>
+</html>
